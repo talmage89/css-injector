@@ -1,4 +1,10 @@
 body {
-  background-color: gray !important;
-  /* color: white !important; */
+  background-color: rgb(255, 255, 255) !important;
+
+  p {
+    color: rgb(0, 0, 0) !important;
+    line-height: 1.6 !important;
+    margin-block-start: 2rem;
+    margin-block-end: 2rem;
+  }
 }

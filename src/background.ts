@@ -1,27 +1,24 @@
-type CallbackDetails = chrome.webNavigation.WebNavigationFramedCallbackDetails;
+import { insertCss } from "./utils";
 
-const listeners: ((arg0: CallbackDetails) => void)[] = [];
+const listeners: ((...args: any[]) => any)[] = [];
 
-function autoInjectCallback(details: CallbackDetails) {
-  console.log("Autoinjecting chrome wide....");
-  chrome.scripting.insertCSS({
-    target: { tabId: details.tabId },
-    files: ["injected/injected.css"],
+function autoInjectCallback() {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    insertCss(tabs);
   });
 }
 
-function autoInjectCurrentSiteCallback(details: CallbackDetails) {
+function autoInjectCurrentSiteCallback(
+  details: chrome.webNavigation.WebNavigationFramedCallbackDetails
+) {
   chrome.storage.sync.get("siteUrls", (data) => {
-    if (data.siteUrls.includes(new URL(details.url).origin)) {
-      chrome.scripting.insertCSS({
-        target: { tabId: details.tabId },
-        files: ["injected/injected.css"],
-      });
-    }
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      data.siteUrls?.includes(new URL(details.url).origin) && insertCss(tabs);
+    });
   });
 }
 
-function toggleAutoInjectListener(newValue: CallbackDetails) {
+function toggleAutoInjectListener(newValue: boolean) {
   if (newValue) {
     if (listeners.includes(autoInjectCallback)) return;
     chrome.webNavigation.onCompleted.addListener(autoInjectCallback, {
@@ -43,7 +40,7 @@ function tryAddAutoInjectCurrentSiteListener() {
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.get(["autoInject"], (data) => {
-    toggleAutoInjectListener(data.autoInject);
+    toggleAutoInjectListener(data.autoInject.newValue);
     tryAddAutoInjectCurrentSiteListener();
   });
 });

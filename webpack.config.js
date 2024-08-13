@@ -1,10 +1,13 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: {
     background: "./src/background.ts",
-    popup: "./src/popup/popup.ts",
+    "popup/index": "./src/popup/index.ts",
+    "popup/style": "./src/popup/style.scss",
+    injected: "./src/injected.scss",
   },
   output: {
     filename: "[name].js",
@@ -28,8 +31,22 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "popup.css",
+      filename: "[name].css",
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: "manifest.json", to: "" },
+        { from: "src/popup/popup.html", to: "popup" },
+      ],
     }),
   ],
   mode: "development",
+  devServer: {
+    static: {
+      directory: path.join(__dirname, "dist"),
+    },
+    compress: true,
+    port: 9000,
+    hot: true,
+  },
 };

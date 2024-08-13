@@ -3,12 +3,18 @@
   "name": "CSS Injector",
   "version": "1.0",
   "description": "Injects custom CSS into web pages.",
-  "permissions": ["webNavigation", "scripting", "storage", "tabs"],
+  "permissions": [
+    "webNavigation",
+    "scripting",
+    "storage",
+    "activeTab",
+    "tabs"
+  ],
   "host_permissions": ["<all_urls>"],
   "background": {
-    "service_worker": "dist/background.js"
+    "service_worker": "background.js"
   },
   "action": {
-    "default_popup": "dist/popup/popup.html"
+    "default_popup": "popup/popup.html"
   }
 }

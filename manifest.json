@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "CSS Injector",
+  "version": "1.0",
+  "description": "Injects custom CSS into web pages.",
+  "permissions": ["webNavigation", "scripting", "storage", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "dist/background.js"
+  },
+  "action": {
+    "default_popup": "dist/popup/popup.html"
+  }
+}

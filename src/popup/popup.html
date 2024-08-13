@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS Injector</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1 class="title">CSS Injector</h1>
+      </header>
+      <div class="content">
+        <button id="injectCss" class="btn">Inject CSS</button>
+        <button id="removeCss" class="btn btn-remove">Remove CSS</button>
+        <label class="toggle-container">
+          <input
+            type="checkbox"
+            id="toggleAutoInject"
+            class="toggle-checkbox"
+          />
+          <span class="toggle-switch"></span>
+          <span class="toggle-label">Auto Inject</span>
+        </label>
+        <label class="toggle-container">
+          <input
+            type="checkbox"
+            id="toggleAutoInjectCurrentSite"
+            class="toggle-checkbox"
+          />
+          <span class="toggle-switch"></span>
+          <span class="toggle-label">Auto Inject on This Site</span>
+        </label>
+      </div>
+    </div>
+    <script src="./popup.js"></script>
+  </body>
+</html>

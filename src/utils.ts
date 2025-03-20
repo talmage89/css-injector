@@ -8,6 +8,7 @@ export function insertCss(tabs: chrome.tabs.Tab[]) {
       chrome.scripting.executeScript({
         target: { tabId },
         func: () => {
+          console.log("executeScript");
           const marker = document.createElement("div");
           marker.className = "css-injected-marker";
           marker.style.display = "none";

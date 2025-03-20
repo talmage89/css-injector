@@ -40,14 +40,14 @@ function tryAddAutoInjectCurrentSiteListener() {
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.get(["autoInject"], (data) => {
-    toggleAutoInjectListener(data.autoInject.newValue);
+    toggleAutoInjectListener(data.autoInject?.newValue);
     tryAddAutoInjectCurrentSiteListener();
   });
 });
 
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area === "sync") {
-    changes.autoInject && toggleAutoInjectListener(changes.autoInject.newValue);
+    changes.autoInject && toggleAutoInjectListener(changes.autoInject?.newValue);
     changes.siteUrls && tryAddAutoInjectCurrentSiteListener();
   }
 });

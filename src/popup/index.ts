@@ -1,17 +1,20 @@
 import { insertCss } from "../utils";
 
 function injectCSS() {
+  console.log("injectCSS");
+
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const tabId = tabs[0]?.id;
     if (!tabId) return;
-
+    console.log("tabId", tabId);
     chrome.scripting.executeScript(
       {
         target: { tabId },
         func: () => !!document.querySelector(".css-injected-marker"),
       },
       (results) => {
-        if (results[0].result) return;
+        console.log("results", results);
+        if (results?.[0]?.result) return;
         insertCss(tabs);
       }
     );
@@ -20,7 +23,7 @@ function injectCSS() {
 
 function removeCSS() {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    const tabId = tabs[0].id;
+    const tabId = tabs?.[0]?.id;
     if (!tabId) return;
 
     chrome.scripting.removeCSS(
@@ -32,9 +35,7 @@ function removeCSS() {
         chrome.scripting.executeScript({
           target: { tabId },
           func: () => {
-            const markers = document.querySelectorAll(
-              ".css-injected-marker"
-            );
+            const markers = document.querySelectorAll(".css-injected-marker");
             for (let i = 0; i < markers.length; i++) {
               markers[i].remove();
             }
@@ -54,7 +55,7 @@ function toggleAutoInjectCurrentSite(event: Event) {
   const checked = (event.target as HTMLInputElement).checked;
   if (checked) {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const tabUrl = tabs[0].url;
+      const tabUrl = tabs?.[0]?.url;
       if (!tabUrl) return;
       const siteUrl = new URL(tabUrl).origin;
       chrome.storage.sync.get({ siteUrls: [] }, (data) => {
@@ -69,7 +70,7 @@ function toggleAutoInjectCurrentSite(event: Event) {
     chrome.storage.sync.get({ siteUrls: [] }, (data) => {
       const siteUrls = data.siteUrls;
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        const tabUrl = tabs[0].url;
+        const tabUrl = tabs?.[0]?.url;
         if (!tabUrl) return;
         const siteUrl = new URL(tabUrl).origin;
         const updatedSiteUrls = siteUrls.filter(
@@ -95,7 +96,7 @@ function loadAutoInjectState() {
         "toggleAutoInjectCurrentSite"
       ) as HTMLInputElement;
 
-      const tabUrl = tabs[0].url;
+      const tabUrl = tabs?.[0]?.url;
       tabUrl &&
         (autoInjectCurrentToggle.checked = data.siteUrls?.includes(
           new URL(tabUrl).origin
